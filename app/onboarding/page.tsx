@@ -15,13 +15,13 @@ import { onboardUser } from "../actions";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { onboardingSchema } from "../utils/zodSchemas";
+import { redirect } from "next/dist/server/api-utils";
 
 export default function Onboarding() {
   const [lastResult, action] = useActionState(onboardUser, undefined);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      console.log(formData.get("lastName"));
       return parseWithZod(formData, { schema: onboardingSchema });
     },
     shouldValidate: "onBlur",
@@ -83,7 +83,7 @@ export default function Onboarding() {
               />
               <p className="text-sm text-red-500">{fields.address.errors}</p>
             </div>
-            <SubmitButton text="Finish onboarding" />
+            <SubmitButton text="Finish onboarding"  />
           </form>
         </CardContent>
       </Card>
