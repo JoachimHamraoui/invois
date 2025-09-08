@@ -21,6 +21,7 @@ export default function Onboarding() {
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
+      console.log(formData.get("lastName"));
       return parseWithZod(formData, { schema: onboardingSchema });
     },
     shouldValidate: "onBlur",
@@ -53,19 +54,34 @@ export default function Onboarding() {
                   defaultValue={fields.firstName.initialValue}
                   placeholder="John"
                 />
+                <p className="text-sm text-red-500">
+                  {fields.firstName.errors}
+                </p>
               </div>
               <div className="flex flex-col gap-2">
                 <Label>Last Name</Label>
-                <Input type="text" placeholder="Doe" />
+                <Input
+                  type="text"
+                  name={fields.lastName.name}
+                  key={fields.lastName.key}
+                  defaultValue={fields.lastName.initialValue}
+                  placeholder="John"
+                />
+                <p className="text-sm text-red-500">
+                  {fields.lastName.errors}
+                </p>
               </div>
             </div>
             <div className="flex flex-col gap-2">
               <Label>Address</Label>
               <Input
                 type="text"
-                name="lastName"
+                name={fields.address.name}
+                key={fields.address.key}
+                defaultValue={fields.address.initialValue}
                 placeholder="Berlin Ave. 123"
               />
+              <p className="text-sm text-red-500">{fields.address.errors}</p>
             </div>
             <SubmitButton text="Finish onboarding" />
           </form>
