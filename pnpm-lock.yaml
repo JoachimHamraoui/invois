@@ -11,6 +11,12 @@ importers:
       '@auth/prisma-adapter':
         specifier: ^2.10.0
         version: 2.10.0(@prisma/client@6.14.0(prisma@6.14.0(typescript@5.9.2))(typescript@5.9.2))(nodemailer@7.0.5)
+      '@conform-to/react':
+        specifier: ^1.9.0
+        version: 1.9.0(react@19.1.0)
+      '@conform-to/zod':
+        specifier: ^1.9.0
+        version: 1.9.0(zod@3.25.76)
       '@prisma/client':
         specifier: 6.14.0
         version: 6.14.0(prisma@6.14.0(typescript@5.9.2))(typescript@5.9.2)
@@ -53,6 +59,9 @@ importers:
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.3.1
+      zod:
+        specifier: ~3.25.76
+        version: 3.25.76
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3
@@ -112,6 +121,19 @@ packages:
     resolution: {integrity: sha512-EliOQoTjGK87jWWqnJvlQjbR4PjQZQqtwRwPAe108WwT9ubuuJJIrL68aNnQr4hFESz6P7SEX2bZy+y2yL37Gw==}
     peerDependencies:
       '@prisma/client': '>=2.26.0 || >=3 || >=4 || >=5 || >=6'
+
+  '@conform-to/dom@1.9.0':
+    resolution: {integrity: sha512-aukL19Y/isqa8vXkYBpOtJbUAttaxpHXTLm/2NMj8TMNRmmVdPkJK8l6ClJM4p8cAPUHi3WrRMRoHSBAR56v8w==}
+
+  '@conform-to/react@1.9.0':
+    resolution: {integrity: sha512-73VdST7vcdblk5SrFeR3xH+pPUuO91Gy9HuC5k0SbeaEDYUiEkdAOfWvDWrcvUBsNsr1EpBmJWQp+MU0pNl+xQ==}
+    peerDependencies:
+      react: '>=18'
+
+  '@conform-to/zod@1.9.0':
+    resolution: {integrity: sha512-OWrSXO7bzEO9Gn4iQSWFHI1kqOdIp/tE1VTNsaWe++B9pGaQI3vh1c3uwmEsFQxAMPIpecJycxJpu4zKyh0iDA==}
+    peerDependencies:
+      zod: ^3.21.0 || ^4.0.0
 
   '@emnapi/core@1.4.5':
     resolution: {integrity: sha512-XsLw1dEOpkSX/WucdqUhPWP7hDxSvZiY+fsUC14h+FtQ2Ifni4znbBt8punRX+Uj2JG/uDb8nEHVKvrVlvdZ5Q==}
@@ -2411,6 +2433,9 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
@@ -2433,6 +2458,18 @@ snapshots:
       - '@simplewebauthn/browser'
       - '@simplewebauthn/server'
       - nodemailer
+
+  '@conform-to/dom@1.9.0': {}
+
+  '@conform-to/react@1.9.0(react@19.1.0)':
+    dependencies:
+      '@conform-to/dom': 1.9.0
+      react: 19.1.0
+
+  '@conform-to/zod@1.9.0(zod@3.25.76)':
+    dependencies:
+      '@conform-to/dom': 1.9.0
+      zod: 3.25.76
 
   '@emnapi/core@1.4.5':
     dependencies:
@@ -4914,3 +4951,5 @@ snapshots:
   yallist@5.0.0: {}
 
   yocto-queue@0.1.0: {}
+
+  zod@3.25.76: {}
