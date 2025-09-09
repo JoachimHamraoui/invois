@@ -18,7 +18,7 @@ export default function Invoices() {
             <CardDescription>Manage your invoices right here</CardDescription>
           </div>
           <Link className={buttonVariants()} href="">
-            <PlusIcon size={20} /> Create Invoice 
+            <PlusIcon /> Create Invoice 
           </Link>
         </div>
       </CardHeader>
