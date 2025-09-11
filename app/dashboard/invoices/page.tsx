@@ -1,6 +1,8 @@
+import { InvoiceList } from "@/app/components/InvoiceList";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
+  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -22,6 +24,9 @@ export default function Invoices() {
           </Link>
         </div>
       </CardHeader>
+      <CardContent>
+        <InvoiceList />
+      </CardContent>
     </Card>
   );
 }
