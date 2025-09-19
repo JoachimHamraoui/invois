@@ -44,7 +44,7 @@ export function InvoiceActions() {
         <DropdownMenuItem asChild>
           <Link href="">
             <CheckCircle className="mr-2 size-4" />
-            Maek as Paid
+            Mark as Paid
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
