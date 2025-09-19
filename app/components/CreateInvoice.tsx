@@ -6,7 +6,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectTrigger,
@@ -14,8 +18,10 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
+import { SubmitButton } from "./SubmitButtons";
 
 export function CreateInvoice() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -76,7 +82,7 @@ export function CreateInvoice() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
           <div className="">
             <Label className="mb-2">Date</Label>
             <Popover>
@@ -105,7 +111,7 @@ export function CreateInvoice() {
 
           <div>
             <Label className="mb-2">Invoice Due</Label>
-            <Select >
+            <Select>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a due date" />
                 <SelectContent>
@@ -115,6 +121,56 @@ export function CreateInvoice() {
                 </SelectContent>
               </SelectTrigger>
             </Select>
+          </div>
+        </div>
+
+        <div>
+          <div className="grid grid-cols-12 gap-4 mb-2 font-medium">
+            <p className="col-span-6">Description</p>
+            <p className="col-span-2">Quantity</p>
+            <p className="col-span-2">Rate</p>
+            <p className="col-span-2">Amount</p>
+          </div>
+
+          <div className="grid grid-cols-12 gap-4 mb-4">
+            <div className="col-span-6">
+              <Textarea placeholder="Item name & Description" />
+            </div>
+            <div className="col-span-2">
+              <Input type="number" placeholder="1" />
+            </div>
+            <div className="col-span-2">
+              <Input type="number" placeholder="10.00" />
+            </div>
+            <div className="col-span-2">
+              <Input type="number" disabled placeholder="0" />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-end">
+          <div className="w-1/3">
+            <div>
+              <span className="font-medium">Subtotal</span>
+              <span className="float-right">0.00</span>
+            </div>
+            <div className="flex justify-between py-2 border-t">
+              <span className="font-medium">Total</span>
+              <span className="font-bold underline underline-offset-2">
+                0.00
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <Label className="mb-2">Note</Label>
+          <Textarea placeholder="Internal notes" />
+        </div>
+
+        <div className="flex items-center justify-end mt-6">
+          <div>
+            <SubmitButton text="Create Invoice" />
           </div>
         </div>
       </CardContent>
