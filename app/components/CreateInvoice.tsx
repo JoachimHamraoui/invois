@@ -27,6 +27,7 @@ import { parseWithZod } from "@conform-to/zod";
 import { useForm } from "@conform-to/react";
 import { invoiceSchema } from "../utils/zodSchemas";
 import { get } from "http";
+import { formatCurrency } from "../utils/formatCurrency";
 // import { formatCurrency } from "../utils/hooks";
 
 export function CreateInvoice() {
@@ -47,15 +48,6 @@ export function CreateInvoice() {
   const [rate, setRate] = useState("");
   const calcTotal = (Number(quantity) || 0) * (Number(rate) || 0);
   
-
-
-  // NOTE: function to format currency temporarily in this component until we figure out the child error when put in hooks.ts
-  function formatCurrency(amount: number) {
-    return new Intl.NumberFormat("fr-BE", {
-      style: "currency",
-      currency: "EUR",
-    }).format(amount);
-  }
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
