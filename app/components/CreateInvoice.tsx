@@ -26,6 +26,8 @@ import { createInvoice } from "../actions";
 import { parseWithZod } from "@conform-to/zod";
 import { useForm } from "@conform-to/react";
 import { invoiceSchema } from "../utils/zodSchemas";
+import { get } from "http";
+// import { formatCurrency } from "../utils/hooks";
 
 export function CreateInvoice() {
   const [lastResult, action] = useActionState(createInvoice, undefined);
@@ -40,6 +42,21 @@ export function CreateInvoice() {
   });
 
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const [quantity, setQuantity] = useState("");
+  const [rate, setRate] = useState("");
+  const calcTotal = (Number(quantity) || 0) * (Number(rate) || 0);
+  
+
+
+  // NOTE: function to format currency temporarily in this component until we figure out the child error when put in hooks.ts
+  function formatCurrency(amount: number) {
+    return new Intl.NumberFormat("fr-BE", {
+      style: "currency",
+      currency: "EUR",
+    }).format(amount);
+  }
+
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <CardContent className="p-6">
@@ -242,6 +259,8 @@ export function CreateInvoice() {
                   type="number"
                   name={fields.invoiceItemQuantity.name}
                   key={fields.invoiceItemQuantity.key}
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
                   placeholder="1"
                 />
                 <p className="text-red-500 text-sm">
@@ -253,6 +272,8 @@ export function CreateInvoice() {
                   type="number"
                   name={fields.invoiceItemRate.name}
                   key={fields.invoiceItemRate.key}
+                  value={rate}
+                  onChange={(e) => setRate(e.target.value)}
                   placeholder="10.00"
                 />
                 <p className="text-red-500 text-sm">
@@ -260,7 +281,7 @@ export function CreateInvoice() {
                 </p>
               </div>
               <div className="col-span-2">
-                <Input type="number" disabled placeholder="0" />
+                <Input value={formatCurrency(calcTotal)} disabled />
               </div>
             </div>
           </div>
@@ -269,7 +290,7 @@ export function CreateInvoice() {
             <div className="w-1/3">
               <div>
                 <span className="font-medium">Subtotal</span>
-                <span className="float-right">0.00</span>
+                <span className="float-right">{formatCurrency(calcTotal)}</span>
               </div>
               <div className="flex justify-between py-2 border-t">
                 <span className="font-medium">Total</span>
@@ -282,7 +303,12 @@ export function CreateInvoice() {
 
           <div>
             <Label className="mb-2">Note</Label>
-            <Textarea name={fields.note.name} key={fields.note.key} defaultValue={fields.note.initialValue} placeholder="Internal notes" />
+            <Textarea
+              name={fields.note.name}
+              key={fields.note.key}
+              defaultValue={fields.note.initialValue}
+              placeholder="Internal notes"
+            />
             <p className="text-red-500 text-sm">{fields.note.errors}</p>
           </div>
 
