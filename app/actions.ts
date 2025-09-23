@@ -59,8 +59,10 @@ export async function onboardUser(previousState: any, formData: FormData) {
       invoiceItemDescription: submission.value.invoiceItemDescription,
       invoiceItemQuantity: submission.value.invoiceItemQuantity,
       invoiceItemRate: submission.value.invoiceItemRate,
+      userId: session.user?.id,
     },
   })  
 
+  return redirect("/dashboard");
 
  }
