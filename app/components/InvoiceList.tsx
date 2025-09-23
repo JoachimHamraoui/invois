@@ -1,7 +1,39 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { InvoiceActions } from "./InvoiceActions";
+import { prisma } from "../utils/db";
+import { requireUser } from "../utils/hooks";
+import { formatCurrency } from "../utils/formatCurrency";
+import { Badge } from "@/components/ui/badge";
 
-export function InvoiceList() {
+
+async function getInvoices(userId: string) {
+    const data = await prisma.invoice.findMany({
+        where: {
+            userId: userId,
+        },
+        select: {
+            id: true,
+            clientName: true,
+            total: true,
+            status: true,
+            createdAt: true,
+            invoiceNumber: true,
+            currency: true
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    })
+
+    return data
+}
+export async function InvoiceList() {
+
+    const session = await requireUser();
+    const data = await getInvoices(session.user?.id as string);
+    console.log(session.user?.id as string);
+    console.log(data);
+
     return (
         <Table>
             <TableHeader>
@@ -15,16 +47,20 @@ export function InvoiceList() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow>
-                    <TableCell className="font-medium">#1</TableCell>
-                    <TableCell className="font-medium">Joachim Hamraoui</TableCell>
-                    <TableCell className="font-medium">$55.00</TableCell>
-                    <TableCell className="font-medium">Paid</TableCell>
-                    <TableCell className="font-medium">2023-06-01</TableCell>
-                    <TableCell className="text-right">
-                        <InvoiceActions />
-                    </TableCell>
-                </TableRow>
+                {data.map((invoice: any) => (
+                    <TableRow key={invoice.id}>
+                        <TableCell>{invoice.invoiceNumber}</TableCell>
+                        <TableCell>{invoice.clientName}</TableCell>
+                        <TableCell>{formatCurrency({ amount: invoice.total, currency: invoice.currency as any })}</TableCell>
+                        <TableCell><Badge>{invoice.status}</Badge></TableCell>
+                        <TableCell>{new Intl.DateTimeFormat('fr-BE', {
+                            dateStyle: 'medium',
+                        }).format(invoice.createdAt)}</TableCell>
+                        <TableCell className="text-right">
+                            <InvoiceActions />
+                        </TableCell>
+                    </TableRow>
+                ))}
             </TableBody>
         </Table>
     );
