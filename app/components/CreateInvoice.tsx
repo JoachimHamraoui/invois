@@ -46,6 +46,9 @@ export function CreateInvoice() {
 
   const [quantity, setQuantity] = useState("");
   const [rate, setRate] = useState("");
+
+  const [currency, setCurrency] = useState("EUR");
+
   const calcTotal = (Number(quantity) || 0) * (Number(rate) || 0);
   
 
@@ -58,6 +61,7 @@ export function CreateInvoice() {
             name={fields.date.name}
             value={selectedDate.toISOString()}
           />
+          <input type="hidden" name={fields.total.name} value={calcTotal} />
           <div className="flex flex-col gap-1 w-fit mb-6">
             <div className="flex items-center gap-4">
               <Badge variant={"secondary"}>Draft</Badge>
@@ -97,6 +101,7 @@ export function CreateInvoice() {
                 name={fields.currency.name}
                 key={fields.currency.key}
                 defaultValue="EUR"
+                onValueChange={(value) => setCurrency(value)}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue
@@ -266,14 +271,13 @@ export function CreateInvoice() {
                   key={fields.invoiceItemRate.key}
                   value={rate}
                   onChange={(e) => setRate(e.target.value)}
-                  placeholder="10.00"
                 />
                 <p className="text-red-500 text-sm">
                   {fields.invoiceItemRate.errors}
                 </p>
               </div>
               <div className="col-span-2">
-                <Input value={formatCurrency(calcTotal)} disabled />
+                <Input value={formatCurrency({ amount: calcTotal, currency: currency as any })} disabled />
               </div>
             </div>
           </div>
@@ -282,12 +286,12 @@ export function CreateInvoice() {
             <div className="w-1/3">
               <div>
                 <span className="font-medium">Subtotal</span>
-                <span className="float-right">{formatCurrency(calcTotal)}</span>
+                <span className="float-right">{formatCurrency({ amount: calcTotal, currency: currency as any })}</span>
               </div>
               <div className="flex justify-between py-2 border-t">
-                <span className="font-medium">Total</span>
+                <span className="font-medium">Total ({currency})</span>
                 <span className="font-bold underline underline-offset-2">
-                  0.00
+                  {formatCurrency({ amount: calcTotal, currency: currency as any })}
                 </span>
               </div>
             </div>
