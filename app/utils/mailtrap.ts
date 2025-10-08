@@ -1,5 +1,5 @@
 import { MailtrapClient } from "mailtrap"
 
 export const emailClient = new MailtrapClient({
-    token: process.env.MAILTRAP_TOKEN as string
+    token: process.env.API_KEY as string
 })

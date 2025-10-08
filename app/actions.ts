@@ -6,6 +6,7 @@ import { invoiceSchema, onboardingSchema } from "./utils/zodSchemas";
 import { prisma } from "./utils/db";
 import { redirect } from "next/navigation";
 import { parse } from "path";
+import { emailClient } from "./utils/mailtrap";
 
 export async function onboardUser(previousState: any, formData: FormData) {
   const session = await requireUser();
@@ -63,6 +64,24 @@ export async function onboardUser(previousState: any, formData: FormData) {
     },
   })  
 
-  return redirect("/dashboard");
+  console.log(data);
+
+  const sender = {
+    email: "hello@joachimhamraoui.com",
+    name: "Joachim Hamraoui",
+  }
+
+  emailClient.send({
+    from: sender,
+    to: [{
+      email: submission.value.clientEmail,
+      name: submission.value.clientName
+    }],
+    subject: "Invoice for " + submission.value.clientName,
+    text: "Invoice for " + submission.value.clientName,
+    category: "Invoice",
+  })
+
+  return redirect("/dashboard/invoices");
 
  }
