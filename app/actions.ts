@@ -7,6 +7,8 @@ import { prisma } from "./utils/db";
 import { redirect } from "next/navigation";
 import { parse } from "path";
 import { emailClient } from "./utils/mailtrap";
+import { formatCurrency } from "./utils/formatCurrency";
+import { Day } from "react-day-picker";
 
 export async function onboardUser(previousState: any, formData: FormData) {
   const session = await requireUser();
@@ -22,18 +24,16 @@ export async function onboardUser(previousState: any, formData: FormData) {
       id: session.user?.id,
     },
     data: {
-        firstName: submission.value.firstName,
-        lastName: submission.value.lastName,
-        address: submission.value.address,
+      firstName: submission.value.firstName,
+      lastName: submission.value.lastName,
+      address: submission.value.address,
     },
   });
   redirect("/dashboard");
-    
 }
 
-
- export async function createInvoice(previousState: any, formData: FormData) {
-  const session = await requireUser(); 
+export async function createInvoice(previousState: any, formData: FormData) {
+  const session = await requireUser();
 
   const submission = parseWithZod(formData, { schema: invoiceSchema });
 
@@ -62,26 +62,46 @@ export async function onboardUser(previousState: any, formData: FormData) {
       invoiceItemRate: submission.value.invoiceItemRate,
       userId: session.user?.id,
     },
-  })  
+  });
 
   console.log(data);
 
   const sender = {
     email: "hello@joachimhamraoui.com",
     name: "Joachim Hamraoui",
-  }
+  };
 
   emailClient.send({
     from: sender,
-    to: [{
-      email: submission.value.clientEmail,
-      name: submission.value.clientName
-    }],
-    subject: "Invoice for " + submission.value.clientName,
-    text: "Invoice for " + submission.value.clientName,
-    category: "Invoice",
-  })
+    to: [
+      {
+        email: submission.value.clientEmail,
+        name: submission.value.clientName,
+      },
+    ],
+    template_uuid: "18812ce5-6b5c-42d6-a06b-957332d525da",
+
+    template_variables: {
+      company_name: "InVois",
+
+      client_name: submission.value.clientName,
+
+      invoice_number: submission.value.invoiceNumber,
+
+      due_date: new Intl.DateTimeFormat("fr-BE", {
+        dateStyle: "medium",
+      }).format(new Date(submission.value.date)),
+
+      total_amount: formatCurrency({
+        amount: submission.value.total,
+        currency: submission.value.currency as any,
+      }),
+
+      pay_link: "Test_Pay_link",
+
+      current_year: new Date().getFullYear(),
+    },
+  });
 
   return redirect("/dashboard/invoices");
-
- }
+}
