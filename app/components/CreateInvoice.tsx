@@ -30,7 +30,14 @@ import { get } from "http";
 import { formatCurrency } from "../utils/formatCurrency";
 // import { formatCurrency } from "../utils/hooks";
 
-export function CreateInvoice() {
+interface iAppProps {
+  firstName: string;
+  lastName: string;
+  address: string;
+  email: string;
+}
+
+export function CreateInvoice({address, firstName, lastName, email}: iAppProps) {
   const [lastResult, action] = useActionState(createInvoice, undefined);
 
   const [form, fields] = useForm({
@@ -129,12 +136,14 @@ export function CreateInvoice() {
                   name={fields.fromName.name}
                   key={fields.fromName.key}
                   placeholder="Your Name"
+                  defaultValue={firstName + " " + lastName}
                 />
                 <p className="text-red-500 text-sm">{fields.fromName.errors}</p>
                 <Input
                   name={fields.fromEmail.name}
                   key={fields.fromEmail.key}
                   placeholder="Your Email"
+                  defaultValue={email}
                 />
                 <p className="text-red-500 text-sm">
                   {fields.fromEmail.errors}
@@ -143,6 +152,7 @@ export function CreateInvoice() {
                   name={fields.fromAddress.name}
                   key={fields.fromAddress.key}
                   placeholder="Your Address"
+                  defaultValue={address}
                 />
                 <p className="text-red-500 text-sm">
                   {fields.fromAddress.errors}
