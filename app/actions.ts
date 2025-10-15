@@ -97,7 +97,7 @@ export async function createInvoice(previousState: any, formData: FormData) {
         currency: submission.value.currency as any,
       }),
 
-      pay_link: "Test_Pay_link",
+      pay_link: `http://localhost:3000/api/invoice/${data.id}`,
 
       current_year: new Date().getFullYear(),
     },
