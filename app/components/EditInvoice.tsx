@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,21 +22,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { CalendarIcon } from "lucide-react";
 import { useActionState, useState } from "react";
 import { SubmitButton } from "./SubmitButtons";
-import { createInvoice } from "../actions";
+import { createInvoice, editInvoice } from "../actions";
 import { parseWithZod } from "@conform-to/zod";
 import { useForm } from "@conform-to/react";
 import { invoiceSchema } from "../utils/zodSchemas";
 import { get } from "http";
 import { formatCurrency } from "../utils/formatCurrency";
 // import { formatCurrency } from "../utils/hooks";
-import { Prisma } from "@prisma";
+import { Prisma } from "../../lib/generated/prisma"; // ✅ correct import for v6.14.0
 
 interface iAppProps {
-    data: Prisma.InvoiceGetPayload<{}>
+  data: Prisma.InvoiceGetPayload<{}>;
 }
 
-export function EditInvoice({data}: iAppProps) {
-  const [lastResult, action] = useActionState(createInvoice, undefined);
+export function EditInvoice({ data }: iAppProps) {
+  const [lastResult, action] = useActionState(editInvoice, undefined);
 
   const [form, fields] = useForm({
     lastResult,
@@ -63,6 +63,7 @@ export function EditInvoice({data}: iAppProps) {
             name={fields.date.name}
             value={selectedDate.toISOString()}
           />
+          <input type="hidden" name="id" value={data.id} />
           <input type="hidden" name={fields.total.name} value={calcTotal} />
           <div className="flex flex-col gap-1 w-fit mb-6">
             <div className="flex items-center gap-4">

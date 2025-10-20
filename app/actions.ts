@@ -105,3 +105,77 @@ export async function createInvoice(previousState: any, formData: FormData) {
 
   return redirect("/dashboard/invoices");
 }
+
+export async function editInvoice(previousState: any, formData: FormData) {
+  const session = await requireUser();
+  const submission = parseWithZod(formData, { schema: invoiceSchema });
+
+  if (submission.status!== "success") {
+    return submission.reply();
+  }
+
+  const data = await prisma.invoice.update({
+    where: {
+      id: formData.get("id") as string,
+      userId: session.user?.id,
+    },
+    data: {
+      invoiceName: submission.value.invoiceName,
+      total: submission.value.total,
+      status: submission.value.status,
+      date: submission.value.date,
+      dueDate: submission.value.dueDate,
+      fromName: submission.value.fromName,
+      fromEmail: submission.value.fromEmail,
+      fromAddress: submission.value.fromAddress,
+      clientName: submission.value.clientName,
+      clientEmail: submission.value.clientEmail,
+      clientAddress: submission.value.clientAddress,
+      currency: submission.value.currency,
+      invoiceNumber: submission.value.invoiceNumber,
+      note: submission.value.note,
+      invoiceItemDescription: submission.value.invoiceItemDescription,
+      invoiceItemQuantity: submission.value.invoiceItemQuantity,
+      invoiceItemRate: submission.value.invoiceItemRate,
+    },
+  });
+
+  const sender = {
+    email: "hello@joachimhamraoui.com",
+    name: "Joachim Hamraoui",
+  };
+
+   emailClient.send({
+    from: sender,
+    to: [
+      {
+        email: submission.value.clientEmail,
+        name: submission.value.clientName,
+      },
+    ],
+    template_uuid: "cb440d41-2b33-462e-80d6-c1da5c8037a7",
+
+    template_variables: {
+      company_name: "InVois",
+
+      client_name: submission.value.clientName,
+
+      invoice_number: submission.value.invoiceNumber,
+
+      due_date: new Intl.DateTimeFormat("fr-BE", {
+        dateStyle: "medium",
+      }).format(new Date(submission.value.date)),
+
+      total_amount: formatCurrency({
+        amount: submission.value.total,
+        currency: submission.value.currency as any,
+      }),
+
+      pay_link: `http://localhost:3000/api/invoice/${data.id}`,
+
+      current_year: new Date().getFullYear(),
+    },
+  });
+
+  return redirect("/dashboard/invoices");
+}
