@@ -27,7 +27,7 @@ export function InvoiceActions({ id }: iAppProps) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="">
+          <Link href={`/api/invoice/${id}`} target="_blank">
             <DownloadCloudIcon className="mr-2 size-4" />
             Download Invoice
           </Link>
