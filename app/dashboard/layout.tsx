@@ -112,7 +112,7 @@ export default async function DashboardLayout({
         </div>
       </div>
 
-      <Toaster richColors closeButton />
+      <Toaster richColors closeButton theme="light" />
     </>
   );
 }
