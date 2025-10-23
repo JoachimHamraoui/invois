@@ -1,3 +1,4 @@
+import { DeleteInvoice } from "@/app/actions";
 import { SubmitButton } from "@/app/components/SubmitButtons";
 import { prisma } from "@/app/utils/db";
 import { requireUser } from "@/app/utils/hooks";
@@ -40,7 +41,11 @@ export default async function DeleteInvoiceRoute({ params }: { params: Params })
             </CardContent>
             <CardFooter className="flex justify-between">
                 <Link className={buttonVariants({ variant: "outline" })} href="/dashboard/invoices">Cancel</Link>
-                <form>
+                <form action={async () => {
+                    "use server"
+                    await DeleteInvoice(invoiceId)
+                }
+                }>
                     <SubmitButton text="Delete Invoice" />
                 </form>
             </CardFooter>
