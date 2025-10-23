@@ -3,7 +3,7 @@ import { requireUser } from "@/app/utils/hooks";
 import { emailClient } from "@/app/utils/mailtrap";
 import { NextResponse } from "next/server";
 
-export async function POST({params} : {params: Promise<{invoice: string}>}) {
+export async function POST(request: Request, {params} : {params: Promise<{invoice: string}>}) {
     try {
         const session = await requireUser();
     const {invoice} = await params;
