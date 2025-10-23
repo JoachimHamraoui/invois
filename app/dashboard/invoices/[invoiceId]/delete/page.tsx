@@ -46,7 +46,7 @@ export default async function DeleteInvoiceRoute({ params }: { params: Params })
                     await DeleteInvoice(invoiceId)
                 }
                 }>
-                    <SubmitButton text="Delete Invoice" />
+                    <SubmitButton text="Delete Invoice" variant="destructive" />
                 </form>
             </CardFooter>
         </Card>
