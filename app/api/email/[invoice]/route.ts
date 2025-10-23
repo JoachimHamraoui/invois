@@ -1,8 +1,11 @@
 import { prisma } from "@/app/utils/db";
 import { requireUser } from "@/app/utils/hooks";
+import { emailClient } from "@/app/utils/mailtrap";
+import { NextResponse } from "next/server";
 
 export async function POST({params} : {params: Promise<{invoice: string}>}) {
-    const session = await requireUser();
+    try {
+        const session = await requireUser();
     const {invoice} = await params;
 
     const invoiceData = await prisma.invoice.findUnique({
@@ -33,5 +36,22 @@ export async function POST({params} : {params: Promise<{invoice: string}>}) {
         return new Response("Invoice not found", {status: 404});
     }
 
+    const sender = {
+        email: "hello@joachimhamraoui.com",
+        name: "Joachim Hamraoui",
+      };
     
+       emailClient.send({
+        from: sender,
+        to: [{email: invoiceData.clientEmail, name: invoiceData.clientName}],
+        subject: `Reminder - Invoice ${invoiceData.invoiceNumber}`,
+        text: `Hello ${invoiceData.clientName},\n\nPlease find attached the invoice for ${invoiceData.invoiceName}.\n\nBest regards,\n${invoiceData.fromName}`,
+      });
+
+      return NextResponse.json({success: true});
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({success: false});
+    }
 }
+
