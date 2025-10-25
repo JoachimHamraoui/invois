@@ -20,8 +20,9 @@ import { toast } from "sonner";
 
 interface iAppProps {
   id: string;
+  status: string;
 }
-export function InvoiceActions({ id }: iAppProps) {
+export function InvoiceActions({ id, status }: iAppProps) {
   const handleSendReminder = () => {
     toast.promise(
       fetch(`/api/email/${id}`, {
@@ -29,7 +30,8 @@ export function InvoiceActions({ id }: iAppProps) {
         headers: {
           "Content-Type": "application/json",
         },
-      }), {
+      }),
+      {
         loading: "Sending reminder email...",
         success: "Reminder Email sent successfully",
         error: "Failed to send reminder email",
@@ -58,8 +60,8 @@ export function InvoiceActions({ id }: iAppProps) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleSendReminder}>
-            <Mail className="mr-2 size-4" />
-            Reminder Email
+          <Mail className="mr-2 size-4" />
+          Reminder Email
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href={`/dashboard/invoices/${id}/delete`}>
@@ -67,12 +69,14 @@ export function InvoiceActions({ id }: iAppProps) {
             Delete Invoice
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href={`/dashboard/invoices/${id}/paid`}>
-            <CheckCircle className="mr-2 size-4" />
-            Mark as Paid
-          </Link>
-        </DropdownMenuItem>
+        {status !== "PAID" && (
+          <DropdownMenuItem asChild>
+            <Link href={`/dashboard/invoices/${id}/paid`}>
+              <CheckCircle className="mr-2 size-4" />
+              Mark as Paid
+            </Link>
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
