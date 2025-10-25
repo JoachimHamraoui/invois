@@ -193,7 +193,7 @@ export async function DeleteInvoice(invoiceId: string) {
   return redirect("/dashboard/invoices")
 }
 
-export async function MarkAsPaid(invoiceId: string) {
+export async function MarkAsPaidAction(invoiceId: string) {
   const session = await requireUser();
 
   const data = await prisma.invoice.update({
