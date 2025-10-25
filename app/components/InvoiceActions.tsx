@@ -68,7 +68,7 @@ export function InvoiceActions({ id }: iAppProps) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="">
+          <Link href={`/dashboard/invoices/${id}/paid`}>
             <CheckCircle className="mr-2 size-4" />
             Mark as Paid
           </Link>
