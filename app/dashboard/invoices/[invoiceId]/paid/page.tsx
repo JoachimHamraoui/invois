@@ -1,10 +1,16 @@
+import { MarkAsPaidAction } from "@/app/actions";
 import { SubmitButton } from "@/app/components/SubmitButtons";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Verified } from "lucide-react";
 import Link from "next/link";
 
-export default function MarkAsPaid() {
+
+
+type Params = Promise<{invoice: string}>
+
+ export default async function MarkAsPaid({ params }: { params: Params }) {
+    const { invoice } = await params
     return (
         <div className="flex flex-1 justify-center items-center">
             <Card className="w-[500px]">
@@ -17,7 +23,10 @@ export default function MarkAsPaid() {
                 </CardContent>
                 <CardFooter className="flex justify-between">
                     <Link className={buttonVariants({ variant: "outline" })} href="/dashboard/invoices">Cancel</Link>
-                    <form>
+                    <form action={async () => {
+                        "use server"
+                        await MarkAsPaidAction(invoice)
+                    }}>
                         <SubmitButton text="Mark as paid" variant="default" />
                     </form>
                 </CardFooter>
