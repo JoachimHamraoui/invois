@@ -30,29 +30,33 @@ async function getInvoices(userId: string) {
 
   // Group and aggregate data
 
-  const aggregatedData = rawData.reduce((acc: { [key: string]: number }, curr) => {
-    const date = new Date(curr.createdAt).toLocaleDateString("fr-BE", {
+  const aggregatedData = rawData.reduce(
+    (acc: { [key: string]: number }, curr) => {
+      const date = new Date(curr.createdAt).toLocaleDateString("fr-FR", {
         month: "short",
         day: "numeric",
-    });
-    acc[date] = (acc[date] || 0) + curr.total;
+      });
+      acc[date] = (acc[date] || 0) + curr.total;
 
-    return acc;
-  }, {});
+      return acc;
+    },
+    {}
+  );
 
   // convert to array
-  const transformedData = Object.entries(aggregatedData).map(([date, amount]) => ({
-    date,
-    amount,
-    originalDate: new Date(date + ", " + new Date().getFullYear()),
-  })).sort((a, b) => a.originalDate.getTime() - b.originalDate.getTime()).map(({ date, amount }) => ({
-    date,
-    amount
-  }));
-  
+  const transformedData = Object.entries(aggregatedData)
+    .map(([date, amount]) => ({
+      date,
+      amount,
+      originalDate: new Date(date + ", " + new Date().getFullYear()),
+    }))
+    .sort((a, b) => a.originalDate.getTime() - b.originalDate.getTime())
+    .map(({ date, amount }) => ({
+      date,
+      amount,
+    }));
 
   return transformedData;
-
 }
 
 export async function InvoiceGraph() {
@@ -67,7 +71,7 @@ export async function InvoiceGraph() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Graph />
+        <Graph data={data} />
       </CardContent>
     </Card>
   );
