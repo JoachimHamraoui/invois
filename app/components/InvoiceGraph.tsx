@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Graph } from "./Graph";
 import { prisma } from "../utils/db";
+import { requireUser } from "../utils/hooks";
 
 async function getInvoices(userId: string) {
   const rawData = await prisma.invoice.findMany({
@@ -39,9 +40,24 @@ async function getInvoices(userId: string) {
     return acc;
   }, {});
 
+  // convert to array
+  const transformedData = Object.entries(aggregatedData).map(([date, amount]) => ({
+    date,
+    amount,
+    originalDate: new Date(date + ", " + new Date().getFullYear()),
+  })).sort((a, b) => a.originalDate.getTime() - b.originalDate.getTime()).map(({ date, amount }) => ({
+    date,
+    amount
+  }));
+  
+
+  return transformedData;
+
 }
 
-export function InvoiceGraph() {
+export async function InvoiceGraph() {
+  const session = await requireUser();
+  const data = await getInvoices(session.user?.id as string);
   return (
     <Card className="lg:col-span-2">
       <CardHeader>
