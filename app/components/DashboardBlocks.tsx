@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { prisma } from "../utils/db";
 import { requireUser } from "../utils/hooks";
+import { formatCurrency } from "../utils/formatCurrency";
 
 async function getData(userId: string) {
   // Promise.all to run multiple async functions/queries
@@ -62,14 +63,13 @@ export async function DashboardBlocks() {
         <CardContent>
           <div>
             <h2 className="text-3xl font-bold">
-              €{" "}
-              {new Intl.NumberFormat("fr-BE", {
-                style: "currency",
+              {formatCurrency({
+                amount: data.reduce((acc, cur) => acc + cur.total, 0),
                 currency: "EUR",
-              }).format(data.reduce((acc, invoice) => acc + invoice.total, 0))}
+              })}
             </h2>
             <p className="text-xs text-muted-foreground">
-              Based on the last 30 days
+              Based on total volume
             </p>
           </div>
         </CardContent>
@@ -104,14 +104,14 @@ export async function DashboardBlocks() {
       </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-sm font-medium">Open Invoices</CardTitle>
+          <CardTitle className="text-sm font-medium">Pending Invoices</CardTitle>
           <Activity className="size-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div>
             <h2 className="text-3xl font-bold">{openInvoices.length}</h2>
             <p className="text-xs text-muted-foreground">
-              Total Unpaid Invoices
+              Invoices which are currently pending
             </p>
           </div>
         </CardContent>
