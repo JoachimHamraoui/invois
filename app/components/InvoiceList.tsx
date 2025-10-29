@@ -4,6 +4,7 @@ import { prisma } from "../utils/db";
 import { requireUser } from "../utils/hooks";
 import { formatCurrency } from "../utils/formatCurrency";
 import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "./EmptyState";
 
 
 async function getInvoices(userId: string) {
@@ -35,7 +36,11 @@ export async function InvoiceList() {
     console.log(data);
 
     return (
-        <Table>
+        <>
+            {data.length < 1 ? (
+                <EmptyState title="No Invoices found" description="Get started by creating your first invoice." buttonText="Create Invoice" href="/dashboard/invoices/create" />
+            ) : (
+                <Table>
             <TableHeader>
                 <TableRow>
                     <TableHead>Invoice ID</TableHead>
@@ -63,5 +68,7 @@ export async function InvoiceList() {
                 ))}
             </TableBody>
         </Table>
+            )}
+        </>
     );
 }
