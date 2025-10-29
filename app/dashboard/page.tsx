@@ -1,4 +1,5 @@
 import { DashboardBlocks } from "../components/DashboardBlocks";
+import { EmptyState } from "../components/EmptyState";
 import { InvoiceGraph } from "../components/InvoiceGraph";
 import { RecentInvoices } from "../components/RecentInvoices";
 import { signOut } from "../utils/auth";
@@ -25,7 +26,7 @@ export default async function DashboardRoute() {
   return (
     <>
       {data.length < 1 ? (
-        <p>No data available</p>
+        <EmptyState title="No Invoices found" description="Get started by creating your first invoice." buttonText="Create Invoice" href="/dashboard/invoices/create" />
       ) : (
         <>
           <DashboardBlocks />
