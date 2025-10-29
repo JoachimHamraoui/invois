@@ -42,24 +42,24 @@ export async function RecentInvoices() {
       <CardHeader>
         <CardTitle>Recent Invoices</CardTitle>
       </CardHeader>
-      <CardContent>
-        {data.map((invoice) => (
-          <div key={invoice.id} className="flex items-center gap-4 mb-4">
+      <CardContent className="flex flex-col gap-8">
+        {data.map((item) => (
+          <div key={item.id} className="flex items-center gap-4">
             <Avatar>
               <AvatarImage
                 className="hidden sm:flex size-9"
               />
-              <AvatarFallback>{getInitials(invoice.clientName)}</AvatarFallback>
+              <AvatarFallback>{getInitials(item.clientName)}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-1">
               <p className="text-sm font-medium leading-none">
-                {invoice.clientName}
+                {item.clientName}
               </p>
               <p className="text-sm text-muted-foreground">
-                {invoice.clientEmail}
+                {item.clientEmail}
               </p>
             </div>
-            <div className="ml-auto font-medium">+ {formatCurrency({amount: invoice.total, currency: invoice.currency as any})}</div>
+            <div className="ml-auto font-medium">+ {formatCurrency({amount: item.total, currency: item.currency as any})}</div>
           </div>
         ))}
       </CardContent>
