@@ -1,4 +1,5 @@
 import { buttonVariants } from "@/components/ui/button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import Link from "next/link";
 
 export function NavBar() {
@@ -7,7 +8,7 @@ export function NavBar() {
       <Link href="/">
         <h1 className="text-3xl font-bold text-blue-600">Invois</h1>
       </Link>
-      <Link href="/login" className={buttonVariants({ })}>Get Started</Link>
+      <Link href="/login"><RainbowButton>Get Started</RainbowButton></Link>
     </nav>
   );
 }
