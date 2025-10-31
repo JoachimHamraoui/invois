@@ -1,20 +1,41 @@
+import { DashboardBlocks } from "../components/DashboardBlocks";
+import { EmptyState } from "../components/EmptyState";
+import { InvoiceGraph } from "../components/InvoiceGraph";
+import { RecentInvoices } from "../components/RecentInvoices";
 import { signOut } from "../utils/auth";
+import { prisma } from "../utils/db";
 import { requireUser } from "../utils/hooks";
+
+async function getData(userId: string) {
+  const data = await prisma.invoice.findMany({
+    where: {
+      userId: userId,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  return data;
+}
 
 export default async function DashboardRoute() {
   const session = await requireUser();
+  const data = await getData(session.user?.id as string);
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <form
-        action={async () => {
-          "use server";
-          await signOut();
-        }}
-      >
-        <button type="submit">Sign Out</button>
-      </form>
-    </div>
+    <>
+      {data.length < 1 ? (
+        <EmptyState title="No Invoices found" description="Get started by creating your first invoice." buttonText="Create Invoice" href="/dashboard/invoices/create" />
+      ) : (
+        <>
+          <DashboardBlocks />
+          <div className="grid gap-4 lg:grid-cols-3">
+            <InvoiceGraph />
+            <RecentInvoices />
+          </div>
+        </>
+      )}
+    </>
   );
 }
