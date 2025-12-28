@@ -29,7 +29,7 @@ export async function onboardUser(previousState: any, formData: FormData) {
       address: submission.value.address,
     },
   });
-  redirect("/dashboard");
+  return redirect("/dashboard");
 }
 
 export async function createInvoice(previousState: any, formData: FormData) {
