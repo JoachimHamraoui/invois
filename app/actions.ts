@@ -110,7 +110,7 @@ export async function editInvoice(previousState: any, formData: FormData) {
   const session = await requireUser();
   const submission = parseWithZod(formData, { schema: invoiceSchema });
 
-  if (submission.status!== "success") {
+  if (submission.status !== "success") {
     return submission.reply();
   }
 
@@ -145,7 +145,7 @@ export async function editInvoice(previousState: any, formData: FormData) {
     name: "Joachim Hamraoui",
   };
 
-   emailClient.send({
+  emailClient.send({
     from: sender,
     to: [
       {
@@ -171,7 +171,7 @@ export async function editInvoice(previousState: any, formData: FormData) {
         currency: submission.value.currency as any,
       }),
 
-      pay_link: `http://localhost:3000/api/invoice/${data.id}`,
+      pay_link: `https://invois-cyan.vercel.app/api/invoice/${data.id}`,
 
       current_year: new Date().getFullYear(),
     },
@@ -186,11 +186,11 @@ export async function DeleteInvoice(invoiceId: string) {
   const data = await prisma.invoice.delete({
     where: {
       userId: session.user?.id as string,
-      id: invoiceId
-    }
-  })
+      id: invoiceId,
+    },
+  });
 
-  return redirect("/dashboard/invoices")
+  return redirect("/dashboard/invoices");
 }
 
 export async function MarkAsPaidAction(invoiceId: string) {
@@ -199,12 +199,12 @@ export async function MarkAsPaidAction(invoiceId: string) {
   const data = await prisma.invoice.update({
     where: {
       userId: session.user?.id as string,
-      id: invoiceId
+      id: invoiceId,
     },
     data: {
-      status: "PAID"
-    }
-  })
+      status: "PAID",
+    },
+  });
 
   return redirect("/dashboard/invoices");
 }
